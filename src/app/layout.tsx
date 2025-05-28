@@ -1,4 +1,4 @@
-import { Header } from './Header'
+import Header from "@/app/shared/header/header"
 import { Footer } from './Footer'
 import './globals.css'
 
