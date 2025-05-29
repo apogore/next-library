@@ -14,26 +14,15 @@ const bookSchema = new mongoose.Schema({
 
 const Book = mongoose.models.Book || mongoose.model('Book', bookSchema);
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     await connectToDB();
 
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get('id');
+    const books = await Book.find({}).lean();
 
-    if (!id) {
-      return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
-    }
-
-    const book = await Book.findById(id).lean();
-
-    if (!book) {
-      return NextResponse.json({ error: 'Book not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(book);
+    return NextResponse.json(books);
   } catch (error) {
-    console.error('Error fetching book:', error);
+    console.error('Error fetching books list:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
