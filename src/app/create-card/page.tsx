@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import ProductCreateForm from "@/app/shared/product-card/ProductCreateForm";
 
 export default function CreateCardPage() {
+  const router = useRouter();
+
   const handleCreate = () => {
-    // You can add any post-create logic here, e.g. redirect or reload
-    console.log("Product created");
+    // After creating a product, navigate back to the main page and refresh
+    router.push("/");
+    router.refresh();
   };
 
   return (
