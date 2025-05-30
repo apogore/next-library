@@ -1,0 +1,93 @@
+@import "../../styles/vars";
+
+.carousel {
+  position: relative;
+  outline: none;
+  user-select: none;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.carousel__track {
+  display: flex;
+  gap: 16px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+
+.carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0,0,0,0.5);
+  border: none;
+  color: $white-color;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.carousel__nav:hover,
+.carousel__nav:focus {
+  background-color: rgba(0,0,0,0.8);
+  outline: none;
+}
+
+.carousel__nav--prev {
+  left: 8px;
+}
+
+.carousel__nav--next {
+  right: 8px;
+}
+
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.carousel__dot {
+  width: 12px;
+  height: 12px;
+  background-color: $light-gray;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.carousel__dot--active,
+.carousel__dot:hover,
+.carousel__dot:focus {
+  background-color: $gray-color;
+  outline: none;
+}
+
+/* Адаптивность */
+
+@media (max-width: 768px) {
+  .carousel__track {
+    gap: 8px;
+  }
+
+  .carousel__nav {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+  }
+
+  .carousel__dot {
+    width: 10px;
+    height: 10px;
+  }
+}

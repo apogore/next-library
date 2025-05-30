@@ -25,6 +25,11 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Missing id parameter' }, { status: 400 });
     }
 
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: 'Invalid id format' }, { status: 400 });
+    }
+
     const book = await Book.findById(id).lean();
 
     if (!book) {
