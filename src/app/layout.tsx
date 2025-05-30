@@ -1,5 +1,5 @@
 import Header from "@/app/shared/header/header"
-import { Footer } from './Footer'
+import Footer from "@/app/shared/footer/footer"
 import './globals.css'
 
 
