@@ -2,26 +2,32 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import ProductCard from "@/app/shared/product-card/ProductCard";
+import Carousel from "@/app/shared/carousel/Carousel";
 
 import { Product } from "@/app/shared/product-card/ProductCard";
 
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[] | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (pageNum: number) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/books/list");
+      const res = await fetch(`/api/books/list?page=${pageNum}`);
       if (!res.ok) {
         throw new Error("Failed to fetch products");
       }
-      const data = await res.json();
-      setProducts(data);
+      const data: Product[] = await res.json();
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setProducts((prev) => [...prev, ...data]);
+      }
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -30,10 +36,26 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    fetchProducts(page);
+  }, [page]);
 
-  if (loading) return <div>Загрузка...</div>;
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handleAddToCart = (id: string) => {
+    // TODO: Реализовать добавление в корзину
+    console.log("Добавить в корзину:", id);
+  };
+
+  const handleClick = (id: string) => {
+    // TODO: Реализовать обработку клика по карточке
+    console.log("Клик по товару:", id);
+  };
+
+  if (loading && products.length === 0) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка загрузки товаров: {error}</div>;
 
   return (
@@ -43,16 +65,12 @@ export default function Home() {
           Создать новый товар
         </Link>
       </div>
-      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {products && products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={() => {}}
-            onClick={() => {}}
-          />
-        ))}
-      </section>
+      <Carousel
+        products={products}
+        onAddToCart={handleAddToCart}
+        onClick={handleClick}
+        loadMore={loadMore}
+      />
     </>
   );
 }
