@@ -1,7 +1,7 @@
 @import "../../styles/vars";
 
 .header {
-  background-color: #000; // черный фон
+  background-color: $black-color; // черный фон
   color: $white-color;
 
   .header-main {
@@ -159,7 +159,7 @@
   }
 
   .header-nav-categories {
-    background-color: #111;
+    background-color: $black-color;
     padding: 5px 20px;
 
     @media screen and (max-width: $desktop) {

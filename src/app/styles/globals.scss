@@ -1,5 +1,10 @@
 @import "./vars";
 @import "react-toastify/dist/ReactToastify.css";
+
+:root {
+  --mobile-max: #{$mobile-max};
+}
+
 html,
 body {
   width: 100%;
