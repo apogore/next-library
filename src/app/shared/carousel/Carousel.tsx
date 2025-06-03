@@ -3,15 +3,14 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
-import ProductCard, { Product } from "../product-card/ProductCard";
+import ProductCardWithCart from "../product-card/ProductCardWithCart";
+import { Product } from "../product-card/ProductCard";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./Carousel.scss";
 
 interface CarouselProps {
   products: Product[];
-  onAddToCart?: (id: string) => void;
-  onClick?: (id: string) => void;
   loadMore?: () => void;
   hasMore?: boolean;
 }
@@ -49,8 +48,6 @@ const useIsMobile = () => {
 
 const Carousel: React.FC<CarouselProps> = ({
   products,
-  onAddToCart,
-  onClick,
   loadMore,
   hasMore = true,
 }) => {
@@ -88,14 +85,10 @@ const Carousel: React.FC<CarouselProps> = ({
 
   // Extracted slides rendering to avoid duplication
   const renderSlides = () =>
-    products.map((product) => (
-      <SwiperSlide key={product.id}>
-        <ProductCard
+    products.map((product, index) => (
+      <SwiperSlide key={`${product.id}-${index}`}>
+        <ProductCardWithCart
           product={product}
-          onAddToCart={onAddToCart}
-          onClick={onClick}
-          showAddToCartButton={true}
-          showDescription={false}
         />
       </SwiperSlide>
     ));

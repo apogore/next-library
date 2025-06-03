@@ -46,13 +46,11 @@ export default function Home() {
   };
 
   const handleAddToCart = (id: string) => {
-    // TODO: Реализовать добавление в корзину
-    console.log("Добавить в корзину:", id);
+    // Удаляем, так как логика теперь в компоненте карточки
   };
 
   const handleClick = (id: string) => {
-    // TODO: Реализовать обработку клика по карточке
-    console.log("Клик по товару:", id);
+    // Удаляем, так как логика теперь в компоненте карточки
   };
 
   if (loading && products.length === 0) return <div>Загрузка...</div>;
@@ -67,8 +65,6 @@ export default function Home() {
       </div>
       <Carousel
         products={products}
-        onAddToCart={handleAddToCart}
-        onClick={handleClick}
         loadMore={loadMore}
       />
     </>

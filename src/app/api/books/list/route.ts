@@ -20,7 +20,18 @@ export async function GET() {
 
     const books = await Book.find({}).lean();
 
-    return NextResponse.json(books);
+    // Map _id to id for client usage
+    interface BookWithId {
+      _id: { toString: () => string };
+      [key: string]: unknown;
+    }
+
+    const booksWithId = (books as BookWithId[]).map((book) => ({
+      ...book,
+      id: book._id.toString(),
+    }));
+
+    return NextResponse.json(booksWithId);
   } catch (error) {
     console.error('Error fetching books list:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
