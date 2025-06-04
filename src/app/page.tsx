@@ -1,57 +1,72 @@
-export default function Home() {
-  return (
-    <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {/* Карточка книги */}
-      <BookCard
-        title="Война и мир"
-        author="Лев Толстой"
-        price={999}
-        cover="https://via.placeholder.com/300x400?text= Война+и+мир"
-      />
-      <BookCard
-        title="Преступление и наказание"
-        author="Фёдор Достоевский"
-        price={799}
-        cover="https://via.placeholder.com/300x400?text= Преступление+и+наказание"
-      />
-      <BookCard
-        title="Гарри Поттер и философский камень"
-        author="Дж. К. Роулинг"
-        price={1299}
-        cover="https://via.placeholder.com/300x400?text= Гарри+Поттер"
-      />
-      <BookCard
-        title="1984"
-        author="Джордж Оруэлл"
-        price={699}
-        cover="https://via.placeholder.com/300x400?text=1984 "
-      />
-    </section>
-  )
-}
+"use client";
 
-// Компонент карточки книги
-function BookCard({ title, author, price, cover }: {
-  title: string
-  author: string
-  price: number
-  cover: string
-}) {
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Carousel from "@/app/shared/carousel/Carousel";
+
+import { Product } from "@/app/shared/product-card/ProductCard";
+
+
+export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchProducts = async (pageNum: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/books/list?page=${pageNum}`);
+      if (!res.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data: Product[] = await res.json();
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setProducts((prev) => [...prev, ...data]);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts(page);
+  }, [page]);
+
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handleAddToCart = (id: string) => {
+    // Удаляем, так как логика теперь в компоненте карточки
+  };
+
+  const handleClick = (id: string) => {
+    // Удаляем, так как логика теперь в компоненте карточки
+  };
+
+  if (loading && products.length === 0) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка загрузки товаров: {error}</div>;
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
-      <img src={cover} alt={title} className="w-full h-64 object-cover" />
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-700">
-  {title}
-</h3>
-<p className="text-sm text-gray-500 dark:text-gray-400">{author}</p>
-<p className="mt-2 font-bold text-indigo-600 dark:text-indigo-400">
-  {price} ₽
-</p>
-        <button className="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700">
-          В корзину
-        </button>
+    <>
+      <div className="mb-4">
+        <Link href="/create-card" className="text-blue-600 hover:underline">
+          Создать новый товар
+        </Link>
       </div>
-    </div>
-  )
+      <Carousel
+        products={products}
+        loadMore={loadMore}
+      />
+    </>
+  );
 }

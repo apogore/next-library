@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Logo from "@/app/shared/logo/logo";
 import Button from "@/app/ui/button/button";
 import Search from "@/app/shared/search/search";
@@ -22,6 +22,7 @@ const navCategories = [
 
 const Header = () => {
   const [isNotificationOpen, setNotificationOpen] = useState(false);
+  const router = useRouter();
 
   const catalogButtonClick = () => {
     window.location.href = window.location.href;
@@ -33,6 +34,14 @@ const Header = () => {
 
   const closeNotification = () => {
     setNotificationOpen(false);
+  };
+
+  const goToProfile = () => {
+    router.push("/profile");
+  };
+
+  const goToCart = () => {
+    router.push("/cart");
   };
 
   return (
@@ -63,26 +72,20 @@ const Header = () => {
             />
             <NotificationPopup visible={isNotificationOpen} onClose={closeNotification} />
           </div>
-          <Link href="/profile" passHref legacyBehavior>
-            <a>
-              <Button
-                className="icon-button"
-                icon="/icons/profile.svg"
-                title="Мой Лабиринт"
-              />
-            </a>
-          </Link>
-          <Link href="/cart" passHref legacyBehavior>
-            <a>
-              <Button
-                className="icon-button cart-button"
-                icon="/icons/cart-icon.svg"
-                title="Корзина"
-              >
-                <span className="cart-badge">0</span>
-              </Button>
-            </a>
-          </Link>
+          <Button
+            className="icon-button"
+            icon="/icons/profile.svg"
+            title="Мой Лабиринт"
+            onClick={goToProfile}
+          />
+          <Button
+            className="icon-button cart-button"
+            icon="/icons/cart-icon.svg"
+            title="Корзина"
+            onClick={goToCart}
+          >
+            <span className="cart-badge">0</span>
+          </Button>
         </div>
       </div>
 
@@ -90,7 +93,7 @@ const Header = () => {
         <ul>
           {navCategories.map((category) => (
             <li key={category}>
-              <Link href="#">{category}</Link>
+              <a href="#">{category}</a>
             </li>
           ))}
         </ul>
